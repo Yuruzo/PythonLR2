@@ -1,34 +1,33 @@
-def guess_number_game():
-    import sys
+def create_latin_to_english_dict():
+    # Чтение количества английских слов в словаре
+    N = int(input())
 
-    # Читаем максимальное число
-    max_number = int(sys.stdin.readline().strip())
-    possible_numbers = set(range(1, max_number + 1))
+    # Словарь для латинских слов, где ключ - латинское слово, а значение - множество английских слов
+    latin_to_english = {}
 
-    while True:
-        line = sys.stdin.readline().strip()
+    # Чтение записей в англо-латинском словаре
+    for _ in range(N):
+        # Ввод записи: английское слово и переводы на латинский
+        line = input().strip()
+        eng_word, latin_words_str = line.split(" - ")
+        latin_words = latin_words_str.split(", ")
 
-        if line == "HELP":
-            break
+        # Добавляем для каждого латинского слова соответствующее английское слово
+        for latin_word in latin_words:
+            if latin_word not in latin_to_english:
+                latin_to_english[latin_word] = []
+            latin_to_english[latin_word].append(eng_word)
 
-        question = set(map(int, line.split()))
+    # Сортировка латинских слов по лексикографическому порядку
+    sorted_latin_words = sorted(latin_to_english.keys())
 
-        # Выбираем ответ так, чтобы оставить больше чисел
-        if len(question & possible_numbers) * 2 == len(possible_numbers):
-            response = "NO"
-        else:
-            response = "YES" if len(question & possible_numbers) > len(possible_numbers) / 2 else "NO"
-
-        print(response)
-
-        if response == "YES":
-            possible_numbers &= question
-        else:
-            possible_numbers -= question
-
-    print(" ".join(map(str, sorted(possible_numbers))))
+    # Выводим латинско-английский словарь
+    for latin_word in sorted_latin_words:
+        # Сортируем английские слова для текущего латинского
+        english_words = sorted(latin_to_english[latin_word])
+        # Выводим латинское слово и переводы
+        print(f"{latin_word} - {', '.join(english_words)}")
 
 
-# Запуск программы для чтения из стандартного ввода
-if __name__ == "__main__":
-    guess_number_game()
+# Запуск программы
+create_latin_to_english_dict()
